@@ -1,0 +1,21 @@
+# 本机安装与运行时数据
+.DS_Store
+.9router/
+accounts.json
+*.auth
+*.plist
+.env
+.env.*
+*.key
+*.log
+node_modules/
+.gateway/
+__pycache__/
+*.pyc
+
+# 个人凭据及临时导出
+cookies.json
+credentials.json
+secrets/
+backup*/
+*.sqlite
