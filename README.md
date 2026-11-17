@@ -6,6 +6,13 @@
 
 中文 Skill、全部展开源码、依赖清单、首次提示语、安装脚本、许可证和小红书素材都放在一起。朋友不需要预先懂 Agent 或 API。
 
+## GitHub 上怎么下载
+
+- 直接下载：[`free-token-farming-skill.zip`](https://github.com/CYeahh-yeah/free-token-pool-skill/blob/main/free-token-farming-skill.zip)；页面右上角点 `Download raw file`，也可以 `git clone https://github.com/CYeahh-yeah/free-token-pool-skill.git` 后使用仓库根目录同名文件。
+- 解压后把 `free-token-farming/` 放进 `~/.codex/skills/`，打开 Codex 先读 [`安装说明.md`](https://github.com/CYeahh-yeah/free-token-pool-skill/blob/main/%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E.md) 或 [`最短安装指南.md`](https://github.com/CYeahh-yeah/free-token-pool-skill/blob/main/%E6%9C%80%E7%9F%AD%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97.md)。
+- 仓库的 `free-token-farming/` 是同一套展开源码；不想解压 zip，可按安装说明让 Agent 从该目录安装。
+- 仓库不包含 API key、cookie、浏览器会话或本机绝对路径；登录、验证码、实名、协议和 Key 填写由本人完成。
+
 ## 当前版本（2026-11-17）
 
 - Skill 源：`~/.codex/skills/free-token-farming/`；中文 `SKILL.md`、`references/`、`agents/openai.yaml`。
@@ -51,4 +58,4 @@ WorkBuddy 客户端 `product.json` 58 个静态模型，官方 `/v3/config` 39 �
 
 ## GitHub 使用
 
-本仓库直接包含 `free-token-farming/` Skill、中文 `安装说明.md`、`NOTICE.md`、`LICENSES/` 与全部展开源码。朋友可克隆仓库后按 `安装说明.md` 操作；也可以下载 Releases 中的完整 zip（若已上传）。仓库不含任何 API key、cookie、浏览器会话或本机绝对路径。
+本仓库直接包含 `free-token-farming/` Skill、中文 `安装说明.md`、`NOTICE.md`、`LICENSES/` 与全部展开源码。朋友可克隆仓库后按 `安装说明.md` 操作；也可直接下载根目录的 `free-token-farming-skill.zip`。仓库不含任何 API key、cookie、浏览器会话或本机绝对路径。当前分享链接是本仓库的 `main` 分支，尚未创建 GitHub Release。
