@@ -58,4 +58,4 @@ WorkBuddy 客户端 `product.json` 58 个静态模型，官方 `/v3/config` 39 �
 
 ## GitHub 使用
 
-本仓库直接包含 `free-token-farming/` Skill、中文 `安装说明.md`、`NOTICE.md`、`LICENSES/` 与全部展开源码。朋友可克隆仓库后按 `安装说明.md` 操作；也可直接下载根目录的 `free-token-farming-skill.zip`。仓库不含任何 API key、cookie、浏览器会话或本机绝对路径。当前分享链接是本仓库的 `main` 分支，尚未创建 GitHub Release。
+本仓库直接包含 `free-token-farming/` Skill、中文 `安装说明.md`、`NOTICE.md`、`LICENSES/` 与全部展开源码。朋友可克隆仓库后按 `安装说明.md` 操作；也可直接下载根目录的 `free-token-farming-skill.zip`。仓库不含任何 API key、cookie、浏览器会话或本机绝对路径。当前分享链接是本仓库的 `main` 分支，尚未创建 GitHub Release。仓库已加 `.gitignore`，忽略常见凭据、数据库和运行时文件；但提交前仍应检查 `git status`，不要把本机账号配置推送到公开仓库。
