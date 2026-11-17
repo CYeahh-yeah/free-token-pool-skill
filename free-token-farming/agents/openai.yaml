@@ -1,0 +1,6 @@
+interface:
+  display_name: "免费模型统一池"
+  short_description: "新手也能接入国内 AI 免费额度，统一供 Agent 调用。"
+  default_prompt: "用 $free-token-farming 带我从零检查平台额度，逐项接入 9router 并验收 free-pool。"
+policy:
+  allow_implicit_invocation: true

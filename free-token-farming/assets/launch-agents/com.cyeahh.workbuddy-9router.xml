@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>WORKDADDY_TELEMETRY</key>
+		<string>0</string>
+	</dict>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>com.cyeahh.workbuddy-9router</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>__NODE__</string>
+		<string>__HOME__/Documents/CYeahhOS/08_AutomationOS/Integrations/workbuddy-9router/sync-credentials.cjs</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>__HOME__/Library/Application Support/WorkDaddy/9router-sync.log</string>
+	<key>StandardOutPath</key>
+	<string>__HOME__/Library/Application Support/WorkDaddy/9router-sync.log</string>
+	<key>WorkingDirectory</key>
+	<string>__HOME__/Documents/CYeahhOS/08_AutomationOS/Integrations/workbuddy-9router</string>
+</dict>
+</plist>

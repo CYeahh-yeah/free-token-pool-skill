@@ -1,0 +1,103 @@
+# Agent 菜鸟的从零上手
+
+这一页给第一次接触 Agent、API 和本地路由的人。照顺序做，某一步没拿到官方确认就停下；不需要先懂命令行。
+
+## 这套东西解决什么
+
+平台账号的免费额度散落在各官网。这个 Skill 把“本人注册登录 → 官方额度/领取状态 → 本机 9router → `free-pool` → 各类 Agent”串起来。每天由脚本检查、领取可领的权益并核验路由，不把 HTTP 200 当到账。
+
+```text
+你本人登录各平台
+       ↓
+官方页面读回额度 / 领取状态
+       ↓
+独立 API 路由（每平台一个前缀）
+       ↓
+9router: free-pool
+       ↓
+Hermes / TRAE / WorkBuddy 额度 / Codex / Claude Code / OMB / 自己的脚本
+```
+
+9router 已经是统一 OpenAI-compatible 路由。Magpie 不是必经一层；只有某个客户端确实无法直接填 9router base URL 时，才考虑再做二级配置。
+
+## 先确认依赖
+
+- 一台能开机的 macOS 电脑，用户本人可完成登录、验证码、实名、协议确认。
+- Node.js 22+：`node --version`。
+- Python 3：`python3 --version`。
+- 9router：本地 `http://127.0.0.1:20128`，能打开 `/v1/models`。
+- 一个支持 Skill 的 Agent：Codex 最省事；也可让 Hermes、Claude Code 等读本目录的 `SKILL.md`。
+- 各平台客户端或浏览器登录会话：WorkBuddy、TRAE CN、Qoder CN、魔搭、百灵、Cloudflare。
+- 包内 `assets/vendor/`：四组展开源码，不用再解嵌套 zip。
+- 不要把 API key、cookie、token 发给 Agent 或贴进聊天；填到本机表单或 0600 凭据文件。
+
+## 目录树
+
+```text
+free-token-farming/
+├── SKILL.md
+├── agents/openai.yaml
+├── references/                  中文步骤、平台与模型证据、Agent 接入
+├── assets/
+│   ├── install.sh               把 vendor 安装到 ~/Documents/CYeahhOS/08_AutomationOS/Integrations
+│   ├── install-launch-agents.sh 把 .xml 模板替换成当前用户路径并生成 .plist
+│   ├── workbuddy-direct.js      单账号直连脚本
+│   ├── launch-agents/*.xml      平台可接受的 LaunchAgent 模板
+│   └── vendor/                  四组展开源码与许可证
+│       ├── free-token-hub/
+│       ├── trae-cn-bridge/
+│       ├── workbuddy-9router/
+│       └── workdaddy-local/
+├── 安装说明.md                   本页的最短路径副本
+├── NOTICE.md                    第三方组件和许可证边界
+└── LICENSES/                    AGPL-3.0 与 MIT 源文件
+```
+
+## 第一句话
+
+把 `free-token-farming/` 放到 `~/.codex/skills/`，重启或刷新 Codex 后说：
+
+> 用 $free-token-farming 带我从零检查平台额度，先只做只读盘点，不登录、不写 Key、不改默认模型；确认我本机依赖齐了，再一项一项带我接入 free-pool。
+
+Agent 应该先读 `SKILL.md` 和本页，报告已装/未装、已验证/待验证，不会一上来索要 Key。
+
+## 安装顺序
+
+1. 在终端进入 Skill 目录，运行 `bash assets/install.sh`。脚本只复制到当前用户目录，不覆盖已有目录；有旧目录时先备份。
+2. TRAE 桥接用 `npm ci`（需 Node 22+）。WorkDaddy 守护进程用 Node 内置 `WebSocket`，新版本可不用额外依赖；若本机 Node 旧且提示缺 `ws`，再单独安装。
+3. 只有在用户本人同意启用后台服务时，运行 `bash assets/install-launch-agents.sh`。脚本把模板里的 `__HOME__` 换成当前用户 home，把 `.xml` 复制成 `~/Library/LaunchAgents/*.plist`，不会直接加载。
+4. 用户本人在浏览器完成每个平台的登录/注册/实名/协议。Agent 不代做，也不保存 cookie。
+5. 本机填 Key 表单：`python3 ~/Documents/CYeahhOS/08_AutomationOS/Integrations/free-token-hub/setup_server.py`，打开 `http://127.0.0.1:47833/`，由本人输入。完成后停止临时服务。
+6. 按 [platforms.md](platforms.md) 逐平台跑官方额度读回和真实模型调用；只有看见最终回复才加入 `free-pool`。
+7. 按 [workbuddy-setup.md](workbuddy-setup.md) 配置 WorkBuddy 多账号签到和凭证同步；在 WorkDaddy 面板本人启用 `daily-account-checkin` 预设，再按 [workbuddy-models.md](workbuddy-models.md) 复核哪个模型当前零成本。
+8. 按 [daily-automation.md](daily-automation.md) 让 Agent 创建每天一次巡检。自动化提示语要保留“官方状态回读、正常静默、新故障才通知”。
+
+## 成功后应该能验收什么
+
+```bash
+curl http://127.0.0.1:20128/v1/models
+curl http://127.0.0.1:20128/api/combos
+python3 ~/Documents/CYeahhOS/08_AutomationOS/Integrations/free-token-hub/hub.py status
+```
+
+还要让 Agent 用 `free-pool` 发一次短 chat 和一次 stream，展示可见回复；把路由命中的模型、HTTP 状态、官方额度状态分开写。若 `hy3` 的普通请求正文为空，把 `max_tokens` 提到 1024 或改流式后重试一次，不要据此认定路由失败。
+
+## 每日巡检第一句话
+
+> 每天运行 $free-token-farming 巡检：先打开魔搭已登录用量页等待真实余额，只有官方两项“今日已完成”同时可见才记录 daily-complete；再运行 hub.py run，核 TRAE/Qoder 官方资格、WorkBuddy 账本和各路由；正常静默，只在登录失效、新失败或明确额度耗尽时通知我。
+
+## 停止与回滚
+
+- 停 LaunchAgent：`launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/<label>.plist`。
+- 停本地临时 Key 表单：关掉运行 `setup_server.py` 的终端。
+- 9router 只改 `free-pool` 组合；配置前备份 `~/.9router/db/data.sqlite`。要回滚就恢复备份或把 `models` 写回原顺序。
+- 不改 Hermes/OMB/WorkBuddy 客户端默认模型，不启用付费回退。
+
+## 常见误判
+
+- 页面显示规则“每日 100”不等于今天已领到；必须有官方状态回读。
+- TRAE `9074`、`checked_in=false` 是平台拒绝，不轮换设备、不高频重试。
+- Qoder `DISABLED` 或 `campaign_unavailable` 表示本次没资格，不写 100 Credits 已到账。
+- `quota=not_observed` 表示这次没有官方 API 余额证据，不是余额为零。
+- 9router `cost=0` 不是 WorkBuddy 官方 credits 免费证明。
+- `hy3` 当前 `x0.00 credits` 且标“限时折扣”；`glm-5.3-flash x0.06`、`hy4-preview x0.29`，不要放进零成本段。
